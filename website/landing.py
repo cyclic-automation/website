@@ -13,14 +13,10 @@ def landing() -> rx.Component:
             rx.heading("Custom Automated Systems To Scale Your Business", size="9", align="center"),
 
             rx.spacer(),
-
-            rx.link(
-                rx.button("Email", size="3", variant="surface"),
-                href="mailto:kyletarrao@cyclic-automation.io"),
-            rx.link(
-                rx.button("Client Portal", size="3", variant="surface"),
-                href="login/"),
-
+            rx.spacer(),
+            rx.spacer(),
+            rx.spacer(),
+            rx.spacer(),
             rx.spacer(),
 
             rx.heading("Services Include:", size="6"),

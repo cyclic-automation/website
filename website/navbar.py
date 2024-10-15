@@ -5,21 +5,24 @@ def navbar() -> rx.Component:
     return rx.box(
         rx.hstack(
             rx.hstack(
-                rx.link(
-                    rx.heading(
-                        "Cyclic Automation", size="7", weight="bold", color_scheme="gray"
-                    ),
-                    href='/'
-                )
+                spacing="5",
             ),
             rx.hstack(
+                rx.link(
+                    rx.button("Home", variant="ghost"),
+                    href="/"),
+                rx.link(
+                    rx.button("Client Portal", variant="ghost"),
+                    href="login/"),
+                rx.link(
+                    rx.button("Contact", variant="ghost"),
+                    href="mailto:kyletarrao@cyclic-automation.io"),
                 justify="end",
                 spacing="5",
             ),
             justify="between",
             align_items="center",
         ),
-        bg=rx.color("sky", 3),
         padding="1em",
         # position="fixed",
         # top="0px",

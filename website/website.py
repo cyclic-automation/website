@@ -11,6 +11,7 @@ class State(rx.State):
 
 def index(content: rx.Component) -> rx.Component:
     return rx.fragment(
+        # rx.theme_panel(),
         base(content)
     )
 
@@ -22,7 +23,7 @@ app = rx.App(
         has_background=True,
         radius="small",
         gray_color="sand",
-        accent_color="indigo"
+        accent_color="bronze"
     )
 )
 
