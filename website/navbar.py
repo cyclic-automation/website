@@ -15,6 +15,9 @@ def navbar() -> rx.Component:
                     rx.button("Client Portal", variant="ghost"),
                     href="login/"),
                 rx.link(
+                    rx.button("Examples", variant="ghost"),
+                    href="/examples"),
+                rx.link(
                     rx.button("Contact", variant="ghost"),
                     href="mailto:kyletarrao@cyclic-automation.io"),
                 justify="end",

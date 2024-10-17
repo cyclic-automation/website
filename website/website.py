@@ -2,6 +2,7 @@ import reflex as rx
 from website.base import base
 from website.landing import landing
 from website.login import login
+from website.examples import examples
 
 class State(rx.State):
     """The app state."""
@@ -23,7 +24,7 @@ app = rx.App(
         has_background=True,
         radius="small",
         gray_color="sand",
-        accent_color="bronze"
+        accent_color="indigo"
     )
 )
 
@@ -38,3 +39,8 @@ app.add_page(
     title="Login",
 )
 
+app.add_page(
+    index(examples()),
+    route="/examples",
+    title="Examples",
+)
