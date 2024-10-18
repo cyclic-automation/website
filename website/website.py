@@ -4,11 +4,17 @@ from website.landing import landing
 from website.login import login
 from website.examples import examples
 
-class State(rx.State):
-    """The app state."""
+analytics_script = """
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4SP16XF9TW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-    ...
-
+  gtag('config', 'G-4SP16XF9TW');
+</script>
+"""
 
 def index(content: rx.Component) -> rx.Component:
     return rx.fragment(
@@ -27,6 +33,8 @@ app = rx.App(
         accent_color="indigo"
     )
 )
+
+app.head_components.append(rx.html(analytics_script))
 
 app.add_page(
     index(landing()),

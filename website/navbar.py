@@ -1,12 +1,11 @@
 import reflex as rx
 from website.landing import landing
 
+
 def navbar() -> rx.Component:
     return rx.box(
         rx.hstack(
-            rx.hstack(
-                spacing="5",
-            ),
+            rx.hstack(justify="start"),
             rx.hstack(
                 rx.link(
                     rx.button("Home", variant="ghost"),
@@ -17,9 +16,19 @@ def navbar() -> rx.Component:
                 rx.link(
                     rx.button("Examples", variant="ghost"),
                     href="/examples"),
-                rx.link(
-                    rx.button("Contact", variant="ghost"),
-                    href="mailto:kyletarrao@cyclic-automation.io"),
+                rx.menu.root(
+                    rx.menu.trigger(
+                        rx.button(
+                            rx.text("Contact"),
+                            rx.icon("chevron-down"),
+                            variant="ghost"
+                        ),
+                    ),
+                    rx.menu.content(
+                        rx.link("Email",
+                                href="mailto:kyletarrao@cyclic-automation.io"),
+                    ),
+                ),
                 justify="end",
                 spacing="5",
             ),
@@ -28,7 +37,5 @@ def navbar() -> rx.Component:
         ),
         padding="1em",
         # position="fixed",
-        # top="0px",
-        # z_index="5",
         width="100%",
     )

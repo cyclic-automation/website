@@ -1,58 +1,40 @@
 import reflex as rx
 import pandas as pd
 
-import pandas as pd
-
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', 1000)
-
-url = "https://fred.stlouisfed.org/graph/fredgraph.csv?bgcolor=%23e1e9f0&chart_type=line&drp=0&fo=open%20sans&graph_bgcolor=%23ffffff&height=450&mode=fred&recession_bars=on&txtcolor=%23444444&ts=12&tts=12&width=1320&nt=0&thu=0&trc=0&show_legend=yes&show_axis_titles=yes&show_tooltip=yes&id=CAPOP,FLPOP,NYPOP,TXPOP&scale=left,left,left,left&cosd=1960-01-01,1960-01-01,1960-01-01,1960-01-01&coed=2023-01-01,2023-01-01,2023-01-01,2023-01-01&line_color=%234572a7,%23aa4643,%2389a54e,%2380699b&link_values=false,false,false,false&line_style=solid,solid,solid,solid&mark_type=none,none,none,none&mw=3,3,3,3&lw=2,2,2,2&ost=-99999,-99999,-99999,-99999&oet=99999,99999,99999,99999&mma=0,0,0,0&fml=a,a,a,a&fq=Annual,Annual,Annual,Annual&fam=avg,avg,avg,avg&fgst=lin,lin,lin,lin&fgsnd=2020-02-01,2020-02-01,2020-02-01,2020-02-01&line_index=1,2,3,4&transformation=lin,lin,lin,lin&vintage_date=2024-10-17,2024-10-17,2024-10-17,2024-10-17&revision_date=2024-10-17,2024-10-17,2024-10-17,2024-10-17&nd=1900-01-01,1900-01-01,1900-01-01,1900-01-01"
-df = pd.read_csv(url)
-
-df = df.set_index("DATE")
-df.index.name = "YEAR"
-df.columns = df.columns.map(lambda x: x.replace("POP", ""))
-df.columns.name = "STATE"
-
-df = df.rename(index=lambda x: x[:4])
-df = df.map(lambda x: x * 1e3)
-df = df.map(lambda x: x * 1e-6)
-df = df.map(lambda x: round(x, 2))
-
-df = df[df.index.astype(int) % 10 == 0]
-
-
-# print(df)
 
 class TabsState(rx.State):
-    value = "tab_graph"
+    value = "tab_data_visualization"
 
     def change_value(self, value):
         self.value = value
 
 
-def intro() -> rx.Component:
+def introduction() -> rx.Component:
     return rx.vstack(
         rx.text(""),
     )
 
 
-def table() -> rx.Component:
-    return rx.vstack(
-        rx.heading("State Population"),
-        rx.data_table(
-            data=df.reset_index(),
-            sort=True,
-        ),
-        rx.text("Population change for the four most populous US States"),
-        align="center",
-        justify="center",
-        width="90%",
-    )
+def data_visualization() -> rx.Component:
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_columns', None)
+    pd.set_option('display.width', 1000)
 
+    url = "https://fred.stlouisfed.org/graph/fredgraph.csv?bgcolor=%23e1e9f0&chart_type=line&drp=0&fo=open%20sans&graph_bgcolor=%23ffffff&height=450&mode=fred&recession_bars=on&txtcolor=%23444444&ts=12&tts=12&width=1320&nt=0&thu=0&trc=0&show_legend=yes&show_axis_titles=yes&show_tooltip=yes&id=CAPOP,FLPOP,NYPOP,TXPOP&scale=left,left,left,left&cosd=1960-01-01,1960-01-01,1960-01-01,1960-01-01&coed=2023-01-01,2023-01-01,2023-01-01,2023-01-01&line_color=%234572a7,%23aa4643,%2389a54e,%2380699b&link_values=false,false,false,false&line_style=solid,solid,solid,solid&mark_type=none,none,none,none&mw=3,3,3,3&lw=2,2,2,2&ost=-99999,-99999,-99999,-99999&oet=99999,99999,99999,99999&mma=0,0,0,0&fml=a,a,a,a&fq=Annual,Annual,Annual,Annual&fam=avg,avg,avg,avg&fgst=lin,lin,lin,lin&fgsnd=2020-02-01,2020-02-01,2020-02-01,2020-02-01&line_index=1,2,3,4&transformation=lin,lin,lin,lin&vintage_date=2024-10-17,2024-10-17,2024-10-17,2024-10-17&revision_date=2024-10-17,2024-10-17,2024-10-17,2024-10-17&nd=1900-01-01,1900-01-01,1900-01-01,1900-01-01"
+    df = pd.read_csv(url)
 
-def graph() -> rx.Component:
+    df = df.set_index("DATE")
+    df.index.name = "YEAR"
+    df.columns = df.columns.map(lambda x: x.replace("POP", ""))
+    df.columns.name = "STATE"
+
+    df = df.rename(index=lambda x: x[:4])
+    df = df.map(lambda x: x * 1e3)
+    df = df.map(lambda x: x * 1e-6)
+    df = df.map(lambda x: round(x, 2))
+
+    df = df[df.index.astype(int) % 10 == 0]
+
     return rx.vstack(
         rx.heading("State Population"),
         rx.recharts.line_chart(
@@ -91,9 +73,22 @@ def graph() -> rx.Component:
             width=800,
             height=300,
         ),
+        rx.data_table(
+            data=df.T.reset_index(),
+            sort=True,
+        ),
         rx.text("Population change for the four most populous US States"),
+        rx.link("Source: Federal Reserve Bank of St. Louis Economic Data (FRED)",
+                href="https://fred.stlouisfed.org/graph/?id=CAPOP,FLPOP,NYPOP,TXPOP"),
         justify="center",
-        align="center"
+        align="center",
+        width="80%"
+    )
+
+
+def data_formatting() -> rx.Component:
+    return rx.vstack(
+        rx.text(""),
     )
 
 
@@ -102,8 +97,8 @@ def examples() -> rx.Component:
         rx.tabs.root(
             rx.tabs.list(
                 rx.tabs.trigger("Introduction", value="tab_intro", disabled=True),
-                rx.tabs.trigger("Table", value="tab_table"),
-                rx.tabs.trigger("Graph", value="tab_graph"),
+                rx.tabs.trigger("Data Visualization", value="tab_data_visualization"),
+                # rx.tabs.trigger("Data Formatting", value="tab_data_formatting"),
                 size="2",
             ),
             value=TabsState.value,
@@ -112,9 +107,9 @@ def examples() -> rx.Component:
 
         rx.match(
             TabsState.value,
-            ("tab_intro", intro()),
-            ("tab_table", table()),
-            ("tab_graph", graph()),
+            ("tab_introduction", introduction()),
+            ("tab_data_visualization", data_visualization()),
+            ("tab_data_formatting", data_formatting()),
             rx.text("Please Select")
         ),
         align="center",
