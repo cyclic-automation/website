@@ -135,7 +135,7 @@ def data_visualization() -> rx.Component:
                 rx.flex(
                     rx.form.control(
                         rx.input(
-                            placeholder="Email Address",
+                            placeholder="Email Me The Data",
                             type="email",
                         ),
                         as_child=True,
