@@ -1,17 +1,42 @@
+import pandas
 import reflex as rx
 import pandas as pd
+import pdfplumber
+import requests
+import io
+import re
+from utils.data import process_df
+from utils.emailer import send_email
+
+
+class FormState(rx.State):
+    form_data = {}
+    df = pandas.DataFrame
+
+    def handle_submit(self, form_data):
+        if form_data['email_to']:
+            send_email(email_to=form_data['email_to'],
+                       df=self.df)
 
 
 class TabsState(rx.State):
-    value = "tab_data_visualization"
+    value = "tab_intro"
 
     def change_value(self, value):
         self.value = value
 
 
-def introduction() -> rx.Component:
+def intro() -> rx.Component:
     return rx.vstack(
-        rx.text(""),
+        rx.heading("Introduction"),
+        rx.text("""
+        This page features a series of hypothetical demonstration projects designed to show the versatility of our automation solutions. 
+        These examples use either data collected from the internet, or randomly generated datasets, to give you a sense of how we can help streamline your data processes. 
+        Navigate through the tabs to see these concepts in action.
+        """),
+        justify="center",
+        align="center",
+        width="50%"
     )
 
 
@@ -20,23 +45,47 @@ def data_visualization() -> rx.Component:
     pd.set_option('display.max_columns', None)
     pd.set_option('display.width', 1000)
 
-    url = "https://fred.stlouisfed.org/graph/fredgraph.csv?bgcolor=%23e1e9f0&chart_type=line&drp=0&fo=open%20sans&graph_bgcolor=%23ffffff&height=450&mode=fred&recession_bars=on&txtcolor=%23444444&ts=12&tts=12&width=1320&nt=0&thu=0&trc=0&show_legend=yes&show_axis_titles=yes&show_tooltip=yes&id=CAPOP,FLPOP,NYPOP,TXPOP&scale=left,left,left,left&cosd=1960-01-01,1960-01-01,1960-01-01,1960-01-01&coed=2023-01-01,2023-01-01,2023-01-01,2023-01-01&line_color=%234572a7,%23aa4643,%2389a54e,%2380699b&link_values=false,false,false,false&line_style=solid,solid,solid,solid&mark_type=none,none,none,none&mw=3,3,3,3&lw=2,2,2,2&ost=-99999,-99999,-99999,-99999&oet=99999,99999,99999,99999&mma=0,0,0,0&fml=a,a,a,a&fq=Annual,Annual,Annual,Annual&fam=avg,avg,avg,avg&fgst=lin,lin,lin,lin&fgsnd=2020-02-01,2020-02-01,2020-02-01,2020-02-01&line_index=1,2,3,4&transformation=lin,lin,lin,lin&vintage_date=2024-10-17,2024-10-17,2024-10-17,2024-10-17&revision_date=2024-10-17,2024-10-17,2024-10-17,2024-10-17&nd=1900-01-01,1900-01-01,1900-01-01,1900-01-01"
-    df = pd.read_csv(url)
+    url = "https://www2.census.gov/programs-surveys/decennial/2020/data/apportionment/population-density-data-table.pdf"
+    response = requests.get(url)
+    pdf_file = io.BytesIO(response.content)
+    pdf = pdfplumber.open(pdf_file)
 
-    df = df.set_index("DATE")
-    df.index.name = "YEAR"
-    df.columns = df.columns.map(lambda x: x.replace("POP", ""))
-    df.columns.name = "STATE"
+    ca, tx, fl, ny = [], [], [], []
+    pattern = r"\s+([\d,]+)\s+[\d,.]+\s+[\d]+\s+([\d,]+)\s+[\d,.]+\s+[\d]+\s+([\d,]+)"
+    for page in pdf.pages[:-2]:
+        text = page.extract_text().lower()
+        ca_triplet = re.search("california" + pattern, text)
+        tx_triplet = re.search("texas" + pattern, text)
+        fl_triplet = re.search("florida" + pattern, text)
+        ny_triplet = re.search("new york" + pattern, text)
+        for i in [1, 2, 3]:
+            ca.append(int(ca_triplet.group(i).replace(",", "")))
+            tx.append(int(tx_triplet.group(i).replace(",", "")))
+            fl.append(int(fl_triplet.group(i).replace(",", "")))
+            ny.append(int(ny_triplet.group(i).replace(",", "")))
 
-    df = df.rename(index=lambda x: x[:4])
-    df = df.map(lambda x: x * 1e3)
+    states = [ca, tx, fl, ny]
+    df = pd.DataFrame(states, columns=[str(2020 - 10 * i) for i in range(len(states[0]))])
+    df["State"] = ["CA", "TX", "FL", "NY"]
+    df = df.set_index("State")
+    df.columns.name = "Year"
+    df = df.reindex(columns=df.columns[::-1])
+
     df = df.map(lambda x: x * 1e-6)
     df = df.map(lambda x: round(x, 2))
 
-    df = df[df.index.astype(int) % 10 == 0]
+    FormState.df = df
+    # print(df)
 
     return rx.vstack(
-        rx.heading("State Population"),
+        rx.heading("Data Extraction & Visualization"),
+        rx.text("""
+                Here we extract US state population data from a PDF sourced from census.gov. 
+                The data is first organized into a table for clarity, then visualized using a graph to highlight trends. 
+                This process illustrates our ability to extract data from any document format and transform it into customized, meaningful insights.
+                """),
+        rx.spacer(),
+        rx.heading("State Population Growth"),
         rx.recharts.line_chart(
             rx.recharts.line(data_key="CA",
                              unit="M",
@@ -58,9 +107,10 @@ def data_visualization() -> rx.Component:
                              type_="monotone",
                              stroke=rx.color("purple"),
                              dot={"blue": rx.color("purple"), "fill": rx.color("purple", 4)}),
-            rx.recharts.x_axis(data_key="YEAR",
+            rx.recharts.x_axis(data_key="Year",
                                label={"value": "Year", "position": "bottom"}),
             rx.recharts.y_axis(unit="M",
+                               domain=[5, 40],
                                label={"value": "Population", "position": "left", "angle": -90}),
             rx.recharts.cartesian_grid(stroke_dasharray="3 3"),
             rx.recharts.graphing_tooltip(),
@@ -68,27 +118,104 @@ def data_visualization() -> rx.Component:
                                layout="vertical",
                                align="right",
                                icon_type="square"),
-            data=df.reset_index().to_dict("records"),
+            data=df.T.reset_index().to_dict("records"),
             margin={"top": 20, "right": 20, "left": 20, "bottom": 20},
             width=800,
             height=300,
         ),
         rx.data_table(
-            data=df.T.reset_index(),
+            data=df.reset_index(),
             sort=True,
         ),
-        rx.text("Population change for the four most populous US States"),
-        rx.link("Source: Federal Reserve Bank of St. Louis Economic Data (FRED)",
-                href="https://fred.stlouisfed.org/graph/?id=CAPOP,FLPOP,NYPOP,TXPOP"),
+        rx.text("Population change for the four most populous US States."),
+        rx.link("Source PDF: Census.gov",
+                href="https://www2.census.gov/programs-surveys/decennial/2020/data/apportionment/population-density-data-table.pdf"),
+        rx.form.root(
+            rx.form.field(
+                rx.flex(
+                    rx.form.control(
+                        rx.input(
+                            placeholder="Email Address",
+                            type="email",
+                        ),
+                        as_child=True,
+                    ),
+                    rx.form.submit(
+                        rx.button("Submit"),
+                        as_child=True,
+                    ),
+                    direction="row",
+                    justify="center"
+                ),
+                rx.flex(
+                    rx.form.message(
+                        "Invalid Email",
+                        match="typeMismatch",
+                    ),
+                    justify="center"
+                ),
+                name="email_to",
+            ),
+            on_submit=FormState.handle_submit,
+            reset_on_submit=True,
+        ),
         justify="center",
         align="center",
         width="80%"
     )
 
 
-def data_formatting() -> rx.Component:
+def data_format() -> rx.Component:
+    process_df()
+    contacts_df = pd.read_csv("data/contacts.csv")
+    contacts_processed_df = pd.read_csv("data/contacts_processed.csv")
+    contacts_rejected_df = pd.read_csv("data/contacts_rejected.csv")
     return rx.vstack(
-        rx.text(""),
+        rx.heading("Data Cleansing & Formatting"),
+        rx.text("""
+        Here we start with a dataset of hypothetical (randomly generated) client information, filled with messy formatting and errors.
+        The data is then cleansed, standardized, and obvious errors are automatically removed. 
+        Entries requiring further human review are flagged and set aside.
+        This example used a small dataset for demonstration purposes, but this algorithm can be used to organize immense datasets at a rapid pace. 
+        """),
+        rx.spacer(),
+        rx.heading("Randomly Generated Client Data"),
+        rx.data_table(
+            data=contacts_df,
+            pagination=True,
+            search=True,
+            sort=True,
+        ),
+        rx.text("""
+                The table shows randomly generated client information. 
+                This data is inputted with varying formats, and contains errors. 
+                We will now format the data automatically:
+                """),
+        rx.spacer(),
+        rx.spacer(),
+        rx.heading("Processed Client Data"),
+        rx.data_table(
+            data=contacts_processed_df,
+            sort=True,
+        ),
+        rx.text("""
+                Client data of varying formats are standardized. 
+                Any obviously correctable errors are automatically corrected.
+                """),
+        rx.spacer(),
+        rx.heading("Rejected Client Data"),
+        rx.data_table(
+            data=contacts_rejected_df,
+            sort=True,
+        ),
+        rx.text("""
+                Client data containing ambiguous errors that could not be resolved automatically. 
+                An extra column is added to explain exactly where the error is located. 
+                This data is saved into a separate file to be reviewed by a human in its original format.
+                """),
+        justify="center",
+        align="center",
+        width="80%"
     )
 
 
@@ -96,9 +223,9 @@ def examples() -> rx.Component:
     return rx.vstack(
         rx.tabs.root(
             rx.tabs.list(
-                rx.tabs.trigger("Introduction", value="tab_intro", disabled=True),
-                rx.tabs.trigger("Data Visualization", value="tab_data_visualization"),
-                # rx.tabs.trigger("Data Formatting", value="tab_data_formatting"),
+                rx.tabs.trigger("Introduction", value="tab_intro"),
+                rx.tabs.trigger("Data Extraction & Visualization", value="tab_data_graph"),
+                rx.tabs.trigger("Data Cleansing & Formatting", value="tab_data_format"),
                 size="2",
             ),
             value=TabsState.value,
@@ -107,9 +234,9 @@ def examples() -> rx.Component:
 
         rx.match(
             TabsState.value,
-            ("tab_introduction", introduction()),
-            ("tab_data_visualization", data_visualization()),
-            ("tab_data_formatting", data_formatting()),
+            ("tab_intro", intro()),
+            ("tab_data_graph", data_visualization()),
+            ("tab_data_format", data_format()),
             rx.text("Please Select")
         ),
         align="center",
