@@ -6,9 +6,8 @@ def landing() -> rx.Component:
         rx.vstack(
             rx.image(
                 src="/logo.png",
-                width="85%",
-                height="85%",
                 border_radius="25%",
+                height="60vh"
             ),
             rx.heading("Custom Automated Systems To Scale Your Business", size="9", align="center"),
 

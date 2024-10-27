@@ -30,8 +30,8 @@ def intro() -> rx.Component:
     return rx.vstack(
         rx.heading("Introduction"),
         rx.text("""
-        This page features a series of hypothetical demonstration projects designed to show the versatility of our automation solutions. 
-        These examples use either data collected from the internet, or randomly generated datasets, to give you a sense of how we can help streamline your data processes. 
+        This page features a series of hypothetical demonstration projects showing the versatility of our automation solutions. 
+        These examples use arbitrary data to give a sense of how we can help streamline your data processes. 
         Navigate through the tabs to see these concepts in action.
         """),
         justify="center",
@@ -75,7 +75,6 @@ def data_visualization() -> rx.Component:
     df = df.map(lambda x: round(x, 2))
 
     FormState.df = df
-    # print(df)
 
     return rx.vstack(
         rx.heading("Data Extraction & Visualization"),
@@ -124,8 +123,9 @@ def data_visualization() -> rx.Component:
             height=300,
         ),
         rx.data_table(
-            data=df.reset_index(),
+            data=df.reset_index().assign(Unit='Million (M)'),
             sort=True,
+
         ),
         rx.text("Population change for the four most populous US States."),
         rx.link("Source PDF: Census.gov",
@@ -141,7 +141,7 @@ def data_visualization() -> rx.Component:
                         as_child=True,
                     ),
                     rx.form.submit(
-                        rx.button("Submit"),
+                        rx.button("Send"),
                         as_child=True,
                     ),
                     direction="row",
