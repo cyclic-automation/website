@@ -1,16 +1,32 @@
 import reflex as rx
 from rxconfig import config
 
+
 def landing() -> rx.Component:
     return rx.container(
         rx.vstack(
-            rx.image(
-                src="/logo.png",
-                border_radius="25%",
-                height="60vh"
+            rx.vstack(
+                rx.spacer(),
+                rx.image(
+                    src="/logo.png",
+                    border_radius="25%",
+                    height=rx.breakpoints(
+                        initial="50vh",
+                        sm="55vh",
+                        lg="55vh"
+                    )
+                ),
+                rx.heading("Custom Automated Systems To Scale Your Business",
+                           size=rx.breakpoints(
+                               initial="7",
+                               sm="8",
+                               lg="9"
+                           ),
+                           align="center"
+                           ),
+                align="center",
+                justify="center"
             ),
-            rx.heading("Custom Automated Systems To Scale Your Business", size="9", align="center"),
-
             rx.spacer(),
             rx.spacer(),
             rx.spacer(),

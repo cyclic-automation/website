@@ -1,0 +1,4 @@
+name,id,account_balance,phone,email,error
+anthony bordain,1818,100,001-582-688-1066,abordain@@app.io,"['phone', 'email']"
+jane goodall,7099,.99,+37-901-800-9506,jane.g@hotmail.com,['phone']
+michael jorda9n,2468,90.90,(870)014-0589,jordan54@yahoo.com,['name']

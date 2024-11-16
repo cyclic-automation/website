@@ -220,25 +220,28 @@ def data_format() -> rx.Component:
 
 
 def examples() -> rx.Component:
-    return rx.vstack(
-        rx.tabs.root(
-            rx.tabs.list(
-                rx.tabs.trigger("Introduction", value="tab_intro"),
-                rx.tabs.trigger("Data Extraction & Visualization", value="tab_data_graph"),
-                rx.tabs.trigger("Data Cleansing & Formatting", value="tab_data_format"),
-                size="2",
+    return rx.flex(
+        rx.vstack(
+            rx.tabs.root(
+                rx.tabs.list(
+                    rx.tabs.trigger("Introduction", value="tab_intro"),
+                    rx.tabs.trigger("Data Extraction & Visualization", value="tab_data_graph"),
+                    rx.tabs.trigger("Data Cleansing & Formatting", value="tab_data_format"),
+                    size="2",
+                ),
+                value=TabsState.value,
+                on_change=lambda x: TabsState.change_value(x),
             ),
-            value=TabsState.value,
-            on_change=lambda x: TabsState.change_value(x),
-        ),
 
-        rx.match(
-            TabsState.value,
-            ("tab_intro", intro()),
-            ("tab_data_graph", data_visualization()),
-            ("tab_data_format", data_format()),
-            rx.text("Please Select")
+            rx.match(
+                TabsState.value,
+                ("tab_intro", intro()),
+                ("tab_data_graph", data_visualization()),
+                ("tab_data_format", data_format()),
+                rx.text("Please Select")
+            ),
+            align="center",
+            justify="center",
         ),
-        align="center",
-        justify="center"
+        width="100%",
     )
