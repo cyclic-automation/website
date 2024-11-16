@@ -17,6 +17,7 @@ class FormState(rx.State):
         if form_data['email_to']:
             send_email(email_to=form_data['email_to'],
                        df=self.df)
+            return rx.toast.success("Email Sent", position="top-center")
 
 
 class TabsState(rx.State):

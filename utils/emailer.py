@@ -16,8 +16,5 @@ def send_email(email_to=None, df=None):
     yag.send(
         to=email_to,
         subject='State Population Growth Data',
-        contents='https://cyclic-automation.io',
+        contents='Cyclic Automation\nhttps://cyclic-automation.io',
         attachments=filename)
-    print("Sent")
-
-
