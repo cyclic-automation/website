@@ -161,7 +161,6 @@ def data_visualization() -> rx.Component:
         ),
         justify="center",
         align="center",
-        width="80%"
     )
 
 
@@ -214,8 +213,7 @@ def data_format() -> rx.Component:
                 This data is saved into a separate file to be reviewed by a human in its original format.
                 """),
         justify="center",
-        align="center",
-        width="80%"
+        align="center"
     )
 
 
@@ -243,5 +241,5 @@ def examples() -> rx.Component:
             align="center",
             justify="center",
         ),
-        width="100%",
+        width="80%",
     )
