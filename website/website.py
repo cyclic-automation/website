@@ -52,3 +52,6 @@ app.add_page(
     route="/examples",
     title="Examples",
 )
+
+if __name__ == "__main__":
+    rx.run()
