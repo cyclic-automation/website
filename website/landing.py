@@ -7,6 +7,8 @@ def landing() -> rx.Component:
         rx.vstack(
             rx.vstack(
                 rx.spacer(),
+                rx.spacer(),
+                rx.spacer(),
                 rx.image(
                     src="/logo.png",
                     border_radius="25%",
@@ -16,6 +18,9 @@ def landing() -> rx.Component:
                         lg="55vh"
                     )
                 ),
+                rx.spacer(),
+                rx.spacer(),
+                rx.spacer(),
                 rx.heading("Custom Automated Systems To Scale Your Business",
                            size=rx.breakpoints(
                                initial="7",
@@ -27,6 +32,11 @@ def landing() -> rx.Component:
                 align="center",
                 justify="center"
             ),
+            rx.spacer(),
+            rx.spacer(),
+            rx.spacer(),
+            rx.spacer(),
+            rx.spacer(),
             rx.spacer(),
             rx.spacer(),
             rx.spacer(),
