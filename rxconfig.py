@@ -5,7 +5,7 @@ config = rx.Config(
     frontend_host="0.0.0.0",
     # backend_host="0.0.0.0",
     frontend_port=10000,
-    backend_port=8000,
+    backend_port=6000,
     debug=False,
     dev_mode=False,
 )
