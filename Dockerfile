@@ -1,6 +1,6 @@
-FROM python:3.12
+FROM python:3.12-slim
 
-# Install necessary dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
     unzip \
@@ -14,7 +14,7 @@ RUN curl -fsSL https://bun.sh/install | bash \
 # Add Bun to PATH
 ENV PATH="/usr/local/bin:$PATH"
 
-# Set up your environment
+# Set working directory
 WORKDIR /website
 COPY . /website
 
@@ -23,4 +23,3 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Command to start the Reflex application
 CMD ["reflex", "run", "--env", "prod"]
-
