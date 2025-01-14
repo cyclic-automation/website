@@ -1,20 +1,14 @@
-FROM python:3.13
+FROM ubuntu:20.04
 
-ENV PYTHONUNBUFFERED=1
-
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g pnpm
+RUN apt-get install -y  \
+    python3 \
+    python3-pip
 
 WORKDIR /website
 COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN rm -rf node_modules
-RUN npm install --production
-
-# Handle SIGTERM signals correctly for Railway's container orchestration
 STOPSIGNAL SIGTERM
 
 EXPOSE 3000 8000
