@@ -11,6 +11,7 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN rm -rf node_modules
 RUN npm install
 
 # Handle SIGTERM signals correctly for Railway's container orchestration
