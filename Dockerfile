@@ -1,25 +1,23 @@
-FROM python:3.12-slim
+# Use the official Python image as the base
+FROM python:3.13
 
-# Install system dependencies
+# Install necessary system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
     unzip \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+    build-essential && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install Bun
-RUN curl -fsSL https://bun.sh/install | bash \
-    && mv /root/.bun/bin/bun /usr/local/bin/
-
-# Add Bun to PATH
-ENV PATH="/usr/local/bin:$PATH"
-
-# Set working directory
 WORKDIR /website
-COPY . /website
+COPY . .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Command to start the Reflex application
+# Handle SIGTERM signals correctly for Railway's container orchestration
+STOPSIGNAL SIGTERM
+
+# Expose the necessary ports
+EXPOSE 3000 8000
+
 CMD ["reflex", "run", "--env", "prod"]
