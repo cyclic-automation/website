@@ -18,8 +18,8 @@ COPY . .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN bun install
-RUN bun build
+RUN npm install
+RUN npm run build
 
 # Handle SIGTERM signals correctly for Railway's container orchestration
 STOPSIGNAL SIGTERM
