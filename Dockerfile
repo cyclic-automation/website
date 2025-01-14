@@ -18,7 +18,8 @@ COPY . .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN reflex export --no-zip
+RUN bun install
+RUN bun build
 
 # Handle SIGTERM signals correctly for Railway's container orchestration
 STOPSIGNAL SIGTERM
