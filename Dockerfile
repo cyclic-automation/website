@@ -12,7 +12,6 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 RUN npm install
-RUN npm run build
 
 # Handle SIGTERM signals correctly for Railway's container orchestration
 STOPSIGNAL SIGTERM
