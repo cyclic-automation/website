@@ -7,7 +7,7 @@ RUN apt-get update &&  \
     curl \
     unzip \
     nodejs \
-    npm \
+    npm --production \
     && apt-get clean
 
 WORKDIR /website
