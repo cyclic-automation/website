@@ -12,16 +12,13 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+WORKDIR /website
 COPY . .
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN npm install \
-    next \
-    react \
-    react-dom
+RUN npm install
 
 RUN reflex --version
 
