@@ -13,20 +13,6 @@ providers = ['python']
     nixPkgs = ['...', 'unzip', 'parallel'] # install unzip because reflex needs it, and install parallel to run the frontend and backend at the same time
     nixLibs = ['zlib']
 
-[build]
-  env = "python3"
-  packages = [
-    "python3",
-    "python3-pip",
-    "python3-setuptools",
-    "python3-wheel",
-    "python3-distutils"
-  ]
-  commands = [
-    "apt-get update -y",
-    "apt-get install -y python3-distutils"
-  ]
-
 # reflex init phase
 [phases.init]
     dependsOn = ['install'] # run after install (install is the default phase for installing the python modules)
