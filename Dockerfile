@@ -16,7 +16,9 @@ RUN apt-get update &&  \
 WORKDIR /website
 COPY . .
 
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install reflex --upgrade
 
 STOPSIGNAL SIGTERM
 
