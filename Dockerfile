@@ -19,6 +19,9 @@ COPY . .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN npm install
+RUN npm run build
+
 STOPSIGNAL SIGTERM
 
 EXPOSE 3000 8000
