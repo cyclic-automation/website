@@ -93,4 +93,4 @@ wrapt==1.17.2
 wsproto==1.2.0
 yagmail==0.15.293
 zipp==3.21.0
-setuptools==67.8.0
+setuptools==75.7.0
