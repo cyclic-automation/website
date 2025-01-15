@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/cyclic-automation/website/issues"
   },
-  "homepage": "https://github.com/cyclic-automation/website#readme"
+  "homepage": "https://github.com/cyclic-automation/website#readme",
+  "dependencies": {
+    "next": "^15.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
 }
