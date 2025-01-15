@@ -12,7 +12,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /website
+WORKDIR /app
 COPY . .
 
 RUN pip install --upgrade pip
