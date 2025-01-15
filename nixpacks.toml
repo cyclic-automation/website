@@ -11,7 +11,7 @@ providers = ['python']
 
 # default setup phase
 [phases.setup]
-    nixPkgs = ['python310', 'unzip', 'parallel'] # specify the Python version, unzip, and parallel
+    nixPkgs = ['python310', 'python3Packages.pip', 'unzip', 'parallel'] # specify the Python version, unzip, and parallel
     nixLibs = ['zlib'] # ensure zlib is installed for gzip-related tasks
 
 # install python dependencies from requirements.txt
