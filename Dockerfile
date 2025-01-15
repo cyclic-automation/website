@@ -20,6 +20,7 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 RUN npm install
+npm update
 RUN npm install next react react-dom
 RUN npm run build
 
