@@ -7,8 +7,9 @@ RUN apt-get update &&  \
     curl \
     unzip \
     nodejs \
-    npm --production \
-    && apt-get clean
+    npm \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /website
 COPY . .
