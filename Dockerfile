@@ -7,7 +7,7 @@ RUN apt-get update && \
     python3.9 \
     python3-pip \
     unzip && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_18.0 | bash - && \
     apt-get install -y nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
