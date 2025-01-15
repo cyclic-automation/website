@@ -2,15 +2,14 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update &&  \
-    apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y curl \
     python3.9 \
     python3-pip \
-    curl \
-    unzip \
-    nodejs \
-    npm \
-    && apt-get clean && \
+    unzip && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /website
@@ -19,10 +18,11 @@ COPY . .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN npm install
-RUN npm update
-RUN npm install next react react-dom
-RUN npm run build
+RUN npm install \
+    next \
+    react \
+    react-dom && \
+    npm run build
 
 STOPSIGNAL SIGTERM
 
