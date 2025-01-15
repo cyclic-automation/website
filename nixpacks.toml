@@ -36,4 +36,4 @@ providers = ['python']
 
 # start phase
 [start]
-    cmd = 'parallel --ungroup --halt now,fail=1 ::: "reflex run --backend-only --env $ENV" "caddy run 2>&1"' # run the backend and frontend in parallel, this will fail fast if either service crashes allowing railway to restart the deployment
+    cmd = 'parallel --ungroup --halt now,fail=1 ::: "reflex run --env $ENV" "caddy run 2>&1"' # run the backend and frontend in parallel, this will fail fast if either service crashes allowing railway to restart the deployment
