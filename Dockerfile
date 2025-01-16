@@ -5,12 +5,14 @@ FROM python:3.11
 WORKDIR /website
 COPY . .
 
+RUN apt-get update
+RUN apt-get install npm -y
+RUN npm run build
+
 # Install app requirements and reflex in the container
 RUN pip install -r requirements.txt
 
-RUN npm run build
-
-# Deploy templates and prepare app
+# Deploy templates and prepare apps
 RUN reflex init
 
 EXPOSE 3000 8000
