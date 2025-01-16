@@ -11,7 +11,7 @@ RUN reflex init
 
 RUN reflex export --frontend-only --no-zip && mv .web/_static/* /srv/ && rm -rf .web
 
-EXPOSE 3000 8000
+EXPOSE $PORT
 
 STOPSIGNAL SIGKILL
 
