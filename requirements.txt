@@ -15,6 +15,7 @@ cssselect==1.2.0
 cssutils==2.11.1
 distro==1.9.0
 docutils==0.21.2
+et_xmlfile==2.0.0
 exceptiongroup==1.2.2
 fastapi==0.115.6
 greenlet==3.1.1
@@ -39,6 +40,7 @@ mdurl==0.1.2
 more-itertools==10.6.0
 nh3==0.2.20
 numpy==2.2.1
+openpyxl==3.1.5
 packaging==24.2
 pandas==2.2.3
 pdfminer.six==20231228
