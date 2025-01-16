@@ -11,7 +11,7 @@ providers = ['python']
 
 # default setup phase
 [phases.setup]
-    nixPkgs = ['...', 'python311Packages.setuptools', 'python311Packages.distutils', 'unzip', 'parallel'] # install unzip because reflex needs it, and install parallel to run the frontend and backend at the same time
+    nixPkgs = ['...', 'unzip', 'parallel'] # install unzip because reflex needs it, and install parallel to run the frontend and backend at the same time
     nixLibs = ['zlib']
 
 # reflex init phase
