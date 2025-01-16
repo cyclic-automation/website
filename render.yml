@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: reflex-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /
+    buildCommand: next build
+    startCommand: reflex run --frontend-port=3000 --backend-port=8000
+    autoDeploy: true
