@@ -12,7 +12,3 @@ route {
 	try_files {path} {path}/ /404.html
 	file_server
 }
-
-cyclic-automation.io {
-    reverse_proxy 0.0.0.0:8000
-}
