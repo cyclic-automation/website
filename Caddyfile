@@ -1,4 +1,4 @@
-cyclic-automation.io:{$PORT}
+:{$PORT}
 
 encode gzip
 
